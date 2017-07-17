@@ -11,7 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
@@ -20,10 +19,13 @@
     "ejs": "^2.5.6",
     "express": "^4.15.3",
     "express-ejs-layouts": "^2.3.0",
+    "express-paginate": "^0.2.2",
     "express-session": "^1.15.3",
     "express-validator": "^3.2.0",
     "mongodb-uri": "^0.9.7",
-    "mongoose": "^4.11.1"
-
+    "mongoose": "^4.11.1",
+    "mssql": "^4.0.4",
+    "sequelize": "^4.3.2",
+    "tedious": "^2.0.0"
   }
 }

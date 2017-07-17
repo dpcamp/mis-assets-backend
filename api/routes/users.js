@@ -1,21 +1,33 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const User = require('../models/User');
-const router = express.Router();
+const express   = require('express'),
+router          = express.Router(),
+
+sql             = require('mssql')
+request         = new sql.Request();
+;
 
 //user POST route
 
 router.route('/')
     .post((req, res) => {
+    
+     //query the DB
+     const query = `INSERT INTO [Users] (first_name, last_name, username, email, phone) VALUES ('${req.body.first_name}', '${req.body.last_name}', '${req.body.username}', '${req.body.email}', '${req.body.phone}')`;
+     request.query(query, (err,record) => {
+        if(record.rowsAffected == "0")
+        { 
+          res.json({message: 'record not found'})
+        }
+        else if(err) {
+            console.log(`Error while querying database :- ${err}`);
+            res.send(err);         
+        }
+        else {
+            res.json({message: "User created."});
+        }
+     
+    })
 
-        const user = new User(req.body);
 
-        user.save((err, user) => {
-            if (err) {
-                res.status(400).json(err);
-            }
-            res.json(user);
-        });
     });
 
 //All Users GET route
@@ -23,12 +35,17 @@ router.route('/')
 router.route('/')
     .get((req, res) => {
 
-        User.find({}, (err, users) => {
-            if (err) {
-                res.status(400).json(err);
-            }
-            res.json(users)
-        });
+     //query the DB
+     const query = 'select * from [users] left outer join [phones] on user_id=owner_id;';
+     request.query(query, (err,record) => {
+        if(err) {
+            console.log(`Error while querying database :- ${err}`);
+            res.send(err);         
+        }
+        else {
+            res.json(record.recordset);
+        }
+     })
 
     });
 
@@ -37,18 +54,23 @@ router.route('/')
 router.route('/:id')
   .get((req, res) => {
 
-    const _id = req.params.id;
+    const user_id = req.params.id;
 
-    User.findOne({ _id }, (err, user) => {
-      if (err) {
-        res.status(400).json(err);
-      }
-      if (!user) {
-        res.status(404).json({ message: 'User not found.' });
-      }
-
-      res.json(user);
-    });
+     //query the DB
+     const query = `select * from [users] left outer join [phones] on user_id=owner_id where user_id = '${user_id}'`;
+     request.query(query, (err,record) => {
+        if(record.rowsAffected == "0")
+        { 
+          res.json({message: 'record not found'})
+        }
+        else if(err) {
+            console.log(`Error while querying database :- ${err}`);
+            res.send(err);         
+        }
+        else {
+            res.json(record.recordset[0]);
+        }
+     })
     
   });
 
@@ -57,17 +79,23 @@ router.route('/:id')
 router.route('/:id')
   .put((req, res) => {
 
-    const _id = req.params.id;
+    const user_id = req.params.id;
 
-    User.findOneAndUpdate({ _id },
-      req.body,
-      { new: true },
-      (err, user) => {
-      if (err) {
-        res.status(400).json(err);
+    //query the DB
+    const query = `UPDATE [Users] SET first_name= '${req.body.first_name}', last_name= '${req.body.last_name}', username= '${req.body.username}', email= '${req.body.email}', phone= '${req.body.phone}' where user_id = '${user_id}'`;
+    request.query(query, (err,record) => {
+      if(record.rowsAffected == "0")
+      { 
+        res.json({message: 'record not found'})
       }
-      res.json(user);
-    });
+      else if(err) {
+          console.log(`Error while querying database :- ${err}`);
+          res.send(err);         
+      }
+      else {
+          res.json({message: 'user updated'});
+      }
+    })
 
   });
 
@@ -76,17 +104,25 @@ router.route('/:id')
 router.route('/:id')
   .delete((req, res) => {
 
-    const _id = req.params.id;
+    const user_id = req.params.id;
 
-    User.findOneAndRemove({ _id }, (err, user) => {
-      if (err) {
-        res.status(400).json(err);
+    //query the DB
+    const query = `delete from [Users] where user_id = '${user_id}'`;
+    request.query(query, (err,record) => {
+      if(record.rowsAffected == "0")
+      { 
+        res.json({message: 'record not found'})
       }
-      if (!user) {
-        res.status(404).json({ message: 'Contact not found.' });
+      else if(err) {
+          console.log(`Error while querying database :- ${err}`);
+          res.send(err);         
       }
-      res.json({ message: `User ${user.first_name} deleted.` });
-    });
+      else {
+        res.json({ message: `User deleted.` });
+      }
+    })
+
+
 
   });
 

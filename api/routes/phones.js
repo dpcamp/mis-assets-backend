@@ -1,94 +1,118 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const Phone = require('../models/Phone');
-const router = express.Router();
+const express = require('express'),
+  router = express.Router(),
+  model = require('../models/phones')
+  ;
 
 //phone POST route
 
-router.route('/')
-    .post((req, res) => {
-
-        const phone = new Phone(req.body);
-
-        phone.save((err, phone) => {
-            if (err) {
-                res.status(400).json(err);
-            }
-            res.json(phone);
-        });
-    });
-
-// All User GET route
+Phones = model.Phones;
 
 router.route('/')
-    .get((req, res) => {
+  .post((req, res) => {
 
-        Phone.find({}, (err, phones) => {
-            if (err) {
-                res.status(400).json(err);
-            }
-            res.json(phones)
-        });
+    Phones.create(req.body)
+      .then(function (newPhone) {
+        res.status(200).json(newPhone)
+      })
+      .catch(function (err) {
+        res.status(500).json(err)
+      })
 
-    });
 
+  });
 
-// Single User GET route
+//All phones GET route
+
+router.route('/')
+  .get((req, res) => {
+    let per_page = req.param('per_page');
+
+    if (per_page == null) limit = 10;
+    else {
+      limit = per_page;
+    }
+    let offset = 0;
+
+    Phones.findAndCountAll({ limit: limit, offset: offset })
+      .then((data) => {
+
+        if (req.param('page') == null) page = 1;
+        else {
+          page = req.param('page');
+        }
+
+        let pages = Math.ceil(data.count / limit);
+        offset = limit * (page - 1);
+        Phones.findAll({
+          limit: limit,
+          offset: offset,
+        })
+          .then((phones) => {
+            res.status(200).json({
+              page: page,
+              per_page: limit,
+              total: data.count,
+              total_pages:
+              pages, data: phones
+            });
+          })
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  });
+
+// Single Phone GET route
 
 router.route('/:id')
   .get((req, res) => {
 
-    const _id = req.params.id;
+    Phones.findById(req.params.id)
+      .then(function (phone) {
+        if (!phone) {
+          res.status(404).json({ message: 'record not found!' })
+        }
+        res.status(200).json(phone);
+      })
+      .catch(function (err) {
+        res.status(500).json(err);
+      })
 
-    Phone.findOne({ _id }, (err, phone) => {
-      if (err) {
-        res.status(400).json(err);
-      }
-      if (!phone) {
-        res.status(404).json({ message: 'Phone not found.' });
-      }
-
-      res.json(phone);
-    });
-    
   });
 
-// phone PUT route
+//phone PUT route
 
 router.route('/:id')
   .put((req, res) => {
-
-    const _id = req.params.id;
-
-    Phone.findOneAndUpdate({ _id },
-      req.body,
-      { new: true },
-      (err, phone) => {
-      if (err) {
-        res.status(400).json(err);
+    Phones.update(req.body, {
+      where: {
+        id: req.params.id
       }
-      res.json(phone);
-    });
-
+    })
+      .then(function (updatedRecords) {
+        res.status(200).json({ message: `${updatedRecords} record(s) updated!` });
+      })
+      .catch(function (err) {
+        res.status(500).json(err);
+      });
   });
 
-// Phone DELETE route
+//Phone DELETE route
 
 router.route('/:id')
   .delete((req, res) => {
 
-    const _id = req.params.id;
-
-    Phone.findOneAndRemove({ _id }, (err, phone) => {
-      if (err) {
-        res.status(400).json(err);
+    Phones.destroy({
+      where: {
+        id: req.params.id
       }
-      if (!phone) {
-        res.status(404).json({ message: 'Phone not found.' });
-      }
-      res.json({ message: `Phone ${phone.number} deleted.` });
-    });
-
+    })
+      .then(function (deletedRecords) {
+        res.status(200).json({ message: `${deletedRecords} record(s) deleted!` });
+      })
+      .catch(function (err) {
+        res.status(500).json(err);
+      });
   });
 
 module.exports = router;

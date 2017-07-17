@@ -1,0 +1,12 @@
+
+> mis-assets@1.0.0 dev /srv/ftp/mis-assets
+> nodemon server.js
+
+[33m[nodemon] 1.11.0[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching: *.*[39m
+[32m[nodemon] starting `node server.js`[39m
+Server is running at http://localhost:3000
+Executing (default): IF OBJECT_ID('[users]', 'U') IS NULL CREATE TABLE [users] ([id] INTEGER NOT NULL IDENTITY(1,1) , [first_name] NVARCHAR(255) NULL, [last_name] NVARCHAR(255) NULL, [createdAt] DATETIMEOFFSET NOT NULL, [updatedAt] DATETIMEOFFSET NOT NULL, PRIMARY KEY ([id]));
+Executing (default): EXEC sys.sp_helpindex @objname = N'[users]';
+Executing (default): INSERT INTO [users] ([first_name],[last_name],[createdAt],[updatedAt]) OUTPUT INSERTED.* VALUES (N'Jane',N'Doe',N'2017-07-13 23:51:35.000 +00:00',N'2017-07-13 23:51:35.000 +00:00');
