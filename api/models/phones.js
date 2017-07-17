@@ -11,13 +11,13 @@ const sequelize = new Sequelize('mis-assets', 'mis', 'm!s@cc3ss', {
 });
 
   exports.Phones = sequelize.define('Telephones', {
-    FullNumber: {
+    full_number: {
       type: Sequelize.STRING
     },
-    PhoneModel: {
+    model: {
       type: Sequelize.STRING
     },
-    Location: {
+    location: {
       type: Sequelize.STRING
     }
   }, {
