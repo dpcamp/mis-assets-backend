@@ -53,7 +53,6 @@ app.use(expressValidator());
 //API Routes
 app.use('/api/users', require('./api/routes/users'));
 app.use('/api/phones', require('./api/routes/phones'));
-app.use('/api/posts', require('./api/routes/posts'));
 
 //Client Routes
 //app.use('/', require('./app/routes'));

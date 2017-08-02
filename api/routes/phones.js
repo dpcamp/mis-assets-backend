@@ -1,11 +1,11 @@
 const express = require('express'),
   router = express.Router(),
-  model = require('../models/phones')
+  db = require('../db')
   ;
 
 //phone POST route
 
-Phones = model.Phones;
+Phones = db.phones;
 
 router.route('/')
   .post((req, res) => {
@@ -27,13 +27,16 @@ router.route('/')
   .get((req, res) => {
     let per_page = req.param('per_page');
 
-    if (per_page == null) limit = 10;
+    if (per_page == null) limit = null;
     else {
       limit = per_page;
     }
     let offset = 0;
 
-    Phones.findAndCountAll({ limit: limit, offset: offset })
+    Phones.findAndCountAll({ 
+      limit: limit, 
+      offset: offset
+     })
       .then((data) => {
 
         if (req.param('page') == null) page = 1;
@@ -46,14 +49,20 @@ router.route('/')
         Phones.findAll({
           limit: limit,
           offset: offset,
+          include: 
+           { model: db.users
+          }
         })
           .then((phones) => {
             res.status(200).json({
+              metadata: {
               page: page,
               per_page: limit,
               total: data.count,
-              total_pages:
-              pages, data: phones
+              total_pages: pages
+              },
+              data: phones
+
             });
           })
       })
@@ -84,13 +93,18 @@ router.route('/:id')
 
 router.route('/:id')
   .put((req, res) => {
+    let id = req.params.id;
+    
+
     Phones.update(req.body, {
       where: {
-        id: req.params.id
+        id: id
       }
     })
-      .then(function (updatedRecords) {
-        res.status(200).json({ message: `${updatedRecords} record(s) updated!` });
+
+      .then(function (newNumber) {
+
+        res.status(200).json({ message: `phone ID: ${id} updated!` });
       })
       .catch(function (err) {
         res.status(500).json(err);

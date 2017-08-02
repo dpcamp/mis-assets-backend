@@ -1,129 +1,72 @@
-const express   = require('express'),
-router          = express.Router(),
+const express = require('express'),
+  router = express.Router(),
+  db = require('../db')
+  ;
 
-sql             = require('mssql')
-request         = new sql.Request();
-;
+  Users = db.users;
 
-//user POST route
-
-router.route('/')
-    .post((req, res) => {
-    
-     //query the DB
-     const query = `INSERT INTO [Users] (first_name, last_name, username, email, phone) VALUES ('${req.body.first_name}', '${req.body.last_name}', '${req.body.username}', '${req.body.email}', '${req.body.phone}')`;
-     request.query(query, (err,record) => {
-        if(record.rowsAffected == "0")
-        { 
-          res.json({message: 'record not found'})
-        }
-        else if(err) {
-            console.log(`Error while querying database :- ${err}`);
-            res.send(err);         
-        }
-        else {
-            res.json({message: "User created."});
-        }
-     
-    })
-
-
-    });
-
-//All Users GET route
+  //All phones GET route
 
 router.route('/')
-    .get((req, res) => {
-
-     //query the DB
-     const query = 'select * from [users] left outer join [phones] on user_id=owner_id;';
-     request.query(query, (err,record) => {
-        if(err) {
-            console.log(`Error while querying database :- ${err}`);
-            res.send(err);         
-        }
-        else {
-            res.json(record.recordset);
-        }
-     })
-
-    });
-
-// Single User GET route
-
-router.route('/:id')
   .get((req, res) => {
+    let per_page = req.param('per_page');
 
-    const user_id = req.params.id;
+    if (per_page == null) limit = null;
+    else {
+      limit = per_page;
+    }
+    let offset = 0;
 
-     //query the DB
-     const query = `select * from [users] left outer join [phones] on user_id=owner_id where user_id = '${user_id}'`;
-     request.query(query, (err,record) => {
-        if(record.rowsAffected == "0")
-        { 
-          res.json({message: 'record not found'})
-        }
-        else if(err) {
-            console.log(`Error while querying database :- ${err}`);
-            res.send(err);         
-        }
+    Users.findAndCountAll({ limit: limit, offset: offset })
+      .then((data) => {
+
+        if (req.param('page') == null) page = 1;
         else {
-            res.json(record.recordset[0]);
+          page = req.param('page');
         }
-     })
-    
+
+        let pages = Math.ceil(data.count / limit);
+        offset = limit * (page - 1);
+        Users.findAll({
+          limit: limit,
+          offset: offset,
+          include: db.phones
+        })
+          .then((users) => {
+            res.status(200).json({
+              metadata: {
+              page: page,
+              per_page: limit,
+              total: data.count,
+              total_pages: pages
+              },
+              data: users
+            });
+          })
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
   });
 
-//user PUT route
-
-router.route('/:id')
+  router.route('/:id')
   .put((req, res) => {
+    let id = req.params.id;
+    let phone = req.params.Telephone.
 
-    const user_id = req.params.id;
-
-    //query the DB
-    const query = `UPDATE [Users] SET first_name= '${req.body.first_name}', last_name= '${req.body.last_name}', username= '${req.body.username}', email= '${req.body.email}', phone= '${req.body.phone}' where user_id = '${user_id}'`;
-    request.query(query, (err,record) => {
-      if(record.rowsAffected == "0")
-      { 
-        res.json({message: 'record not found'})
-      }
-      else if(err) {
-          console.log(`Error while querying database :- ${err}`);
-          res.send(err);         
-      }
-      else {
-          res.json({message: 'user updated'});
+    Phones.update(req.body, {
+      where: {
+        id: id
       }
     })
 
+      .then(function (updatedUser) {
+
+        res.status(200).json({ message: `phone ID: ${id} updated!` });
+      })
+      .catch(function (err) {
+        res.status(500).json(err);
+      });
   });
 
-//User DELETE route
-
-router.route('/:id')
-  .delete((req, res) => {
-
-    const user_id = req.params.id;
-
-    //query the DB
-    const query = `delete from [Users] where user_id = '${user_id}'`;
-    request.query(query, (err,record) => {
-      if(record.rowsAffected == "0")
-      { 
-        res.json({message: 'record not found'})
-      }
-      else if(err) {
-          console.log(`Error while querying database :- ${err}`);
-          res.send(err);         
-      }
-      else {
-        res.json({ message: `User deleted.` });
-      }
-    })
-
-
-
-  });
-
-module.exports = router;
+  module.exports = router;
