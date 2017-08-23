@@ -19,10 +19,14 @@ db.sequelize = sequelize;
 
 db.users = require('./models/users.js')(sequelize,Sequelize);
 db.phones = require('./models/phones.js')(sequelize,Sequelize);
+db.userPhones = sequelize.define('userPhones')
 
 //Sequelize Associations
 
-db.users.hasOne(db.phones);
-db.phones.belongsTo(db.users);
+db.users.belongsToMany(db.phones, {through: 'userPhones'});
+db.phones.belongsToMany(db.users, {as: 'owners', through: 'userPhones'});
+
+// Sync SQL with Sequelize Models USE CAUTION
+sequelize.sync();
 
 module.exports = db;

@@ -6,6 +6,7 @@ const express = require('express'),
 //phone POST route
 
 Phones = db.phones;
+UserPhones = db.UserPhones;
 
 router.route('/')
   .post((req, res) => {
@@ -25,7 +26,7 @@ router.route('/')
 
 router.route('/')
   .get((req, res) => {
-    let per_page = req.param('per_page');
+    let per_page = req.params.per_page;
 
     if (per_page == null) limit = null;
     else {
@@ -39,9 +40,9 @@ router.route('/')
      })
       .then((data) => {
 
-        if (req.param('page') == null) page = 1;
+        if (req.params.page == null) page = 1;
         else {
-          page = req.param('page');
+          page = req.params.page;
         }
 
         let pages = Math.ceil(data.count / limit);
@@ -49,9 +50,10 @@ router.route('/')
         Phones.findAll({
           limit: limit,
           offset: offset,
-          include: 
-           { model: db.users
-          }
+          include: [{ model: db.users,
+            as: 'owners',
+            through: {attributes: []}
+          }]
         })
           .then((phones) => {
             res.status(200).json({
@@ -94,7 +96,7 @@ router.route('/:id')
 router.route('/:id')
   .put((req, res) => {
     let id = req.params.id;
-    
+
 
     Phones.update(req.body, {
       where: {
@@ -128,5 +130,51 @@ router.route('/:id')
         res.status(500).json(err);
       });
   });
+
+// Single Phone User Assignment GET route
+
+router.route('/:id/users')
+  .get((req, res) => {
+    
+    Phones.findById(req.params.id)
+      .then(function (phone) {
+        if (!phone) {
+          res.status(404).json({ message: 'record not found!' })
+        }
+        phone.getUsers()
+        .then(function (result) {
+         res.status(200).json(result);
+        })
+        
+      })
+      .catch(function (err) {
+        res.status(500).json({ error: `${err}`});
+      })
+
+  });
+
+// Single Phone User Assignment POST route
+
+router.route('/:id/users')
+  .post((req, res) => {
+    let users = req.body.UserSAMAccountName;
+    
+    Phones.findById(req.params.id)
+      .then(function (phone) {
+        if (!phone) {
+          res.status(404).json({ message: 'record not found!' })
+        }
+        phone.setUsers([users])
+        .then(associatedUsers => {
+          res.status(200).json({ message: `${associatedUsers} added!`});
+        })
+        
+      })
+      .catch(function (err) {
+        res.status(500).json({ error: `${err}`});
+      })
+
+  });
+
 
 module.exports = router;

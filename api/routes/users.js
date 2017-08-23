@@ -4,6 +4,7 @@ const express = require('express'),
   ;
 
   Users = db.users;
+  UserPhones = db.UserPhones;
 
   //All phones GET route
 
@@ -30,7 +31,10 @@ router.route('/')
         Users.findAll({
           limit: limit,
           offset: offset,
-          include: db.phones
+          include: [{ model: db.phones,
+          attributes:['id','full_number', 'location'],
+          through: {attributes: []}
+          }]
         })
           .then((users) => {
             res.status(200).json({
@@ -48,25 +52,67 @@ router.route('/')
         res.status(500).json(err);
       });
   });
-
-  router.route('/:id')
-  .put((req, res) => {
+//Single User GET rout
+router.route('/:id')
+  .get((req, res) => {
     let id = req.params.id;
-    let phone = req.params.Telephone.
 
-    Phones.update(req.body, {
-      where: {
-        id: id
-      }
-    })
-
-      .then(function (updatedUser) {
-
-        res.status(200).json({ message: `phone ID: ${id} updated!` });
+    Users.findById(id)
+      .then(function (user) {
+        if (!user) {
+          res.status(404).json({ message: `User: ${id} not found!` })
+        }
+        res.status(200).json(user);
       })
       .catch(function (err) {
         res.status(500).json(err);
-      });
+      })
+
+  });
+
+// Single User->Phone Assignment GET route
+
+router.route('/:id/phones')
+  .get((req, res) => {
+    
+    Users.findById(req.params.id)
+      .then(function (user) {
+        if (!user) {
+          res.status(404).json({ message: 'record not found!' })
+        }
+        user.getPhones()
+        .then(function (result) {
+          res.status(200).json(result);
+        })
+        
+      })
+      .catch(function (err) {
+        res.status(500).json({message: `An error occured: ${err}`});
+      })
+
+  });
+
+// Single User->Phone Assignment POST route
+
+router.route('/:id/phones')
+  .post((req, res) => {
+    let phones = req.body.phoneID;
+    
+    Users.findById(req.params.id)
+      .then(function (user) {
+        if (!user) {
+          res.status(404).json({ message: 'record not found!' })
+        }
+        user.setPhones([phones])
+        .then(associatedPhones => {
+          res.status(200).json({ message: `${associatedPhones} added!`});
+        })
+        
+      })
+      .catch(function (err) {
+        res.status(500).json(err);
+      })
+
   });
 
   module.exports = router;

@@ -1,5 +1,5 @@
   module.exports = (sequelize, DataTypes) => {  
-  const Phones = sequelize.define('Telephones', {
+  const Phones = sequelize.define('Phones', {
     full_number: {
       type: DataTypes.STRING
     },
