@@ -1,5 +1,5 @@
   module.exports = (sequelize, DataTypes) => {  
-  const Phones = sequelize.define('Phones', {
+  const Phones = sequelize.define('phones', {
     full_number: {
       type: DataTypes.STRING
     },
@@ -13,9 +13,6 @@
       type: DataTypes.STRING
     },
     position: {
-      type: DataTypes.STRING
-    },
-    UserSAMAccountName: {
       type: DataTypes.STRING
     },
     location: {
@@ -98,8 +95,8 @@
     },
   }, {
     freezeTableName: true,
-    timestamps: false
-
+    timestamps: false,
+    underscored: true
   });
 
   return Phones; 

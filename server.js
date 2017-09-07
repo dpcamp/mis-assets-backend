@@ -10,7 +10,8 @@ require('dotenv').config();
     expressValidator    = require('express-validator'),
     session             = require('express-session'),
     cookieParser        = require('cookie-parser'),
-    flash               = require('connect-flash')
+    flash               = require('connect-flash'),
+    winston             = require('winston')
     //sql                 = require('mssql')
 
     //Sequelize           = require('sequelize')
@@ -53,9 +54,11 @@ app.use(expressValidator());
 //API Routes
 app.use('/api/users', require('./api/routes/users'));
 app.use('/api/phones', require('./api/routes/phones'));
+app.use('/api/computers', require('./api/routes/computers'));
 
 //Client Routes
 //app.use('/', require('./app/routes'));
+
 
 app.listen(port, () => {
 

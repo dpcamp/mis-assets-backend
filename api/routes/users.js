@@ -31,10 +31,13 @@ router.route('/')
         Users.findAll({
           limit: limit,
           offset: offset,
-          include: [{ model: db.phones,
-          attributes:['id','full_number', 'location'],
-          through: {attributes: []}
-          }]
+          include: [
+            {model: db.phones,
+              attributes:['id','full_number', 'location'],
+              through: {attributes: []}
+            },
+              {model: db.computer}
+          ]
         })
           .then((users) => {
             res.status(200).json({

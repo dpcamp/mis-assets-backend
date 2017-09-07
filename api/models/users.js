@@ -1,12 +1,12 @@
   module.exports = (sequelize, DataTypes) => {
-    const Users = sequelize.define('Users', {
-    givenName: {
+    const Users = sequelize.define('users', {
+    first_name: {
       type: DataTypes.STRING
     },
-    sn: {
+    last_name: {
       type: DataTypes.STRING
     },
-    mail: {
+    email: {
       type: DataTypes.STRING
     },
     title: {
@@ -15,17 +15,17 @@
     department: {
       type: DataTypes.STRING
     },
-    sAMAccountName: {
+    user_name: {
       type: DataTypes.STRING,
       primaryKey: true
     },
-    displayName: {
+    display_name: {
       type: DataTypes.STRING
     },
   }, {
     freezeTableName: true,
-    timestamps: false
-
+    timestamps: false,
+    underscored: true
   });
   return Users; 
   };

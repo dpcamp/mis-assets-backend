@@ -1,8 +1,10 @@
 const express = require('express'),
   router = express.Router(),
-  db = require('../db')
+  db = require('../db'),
+  winston = require('winston')
   ;
-
+winston.add(winston.transports.File, { filename: 'logfile.log' });
+winston.level = 'debug';
 //phone POST route
 
 Phones = db.phones;
@@ -158,19 +160,20 @@ router.route('/:id/users')
 router.route('/:id/users')
   .post((req, res) => {
     let users = req.body.UserSAMAccountName;
-    
+
     Phones.findById(req.params.id)
       .then(function (phone) {
         if (!phone) {
           res.status(404).json({ message: 'record not found!' })
         }
-        phone.setUsers([users])
+        //winston.log('debug',phone)
+        phone.setOwners([users])
         .then(associatedUsers => {
           res.status(200).json({ message: `${associatedUsers} added!`});
         })
         
       })
-      .catch(function (err) {
+      .catch(function (err, phone) {
         res.status(500).json({ error: `${err}`});
       })
 
