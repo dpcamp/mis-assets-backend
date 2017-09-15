@@ -3,9 +3,9 @@ const Sequelize = require ('sequelize'),
 ;
 
 
-const sequelize = new Sequelize('mis-assets', 'mis', 'm!s@cc3ss', {
-    host: '192.168.235.129',
-    dialect: 'mssql',
+const sequelize = new Sequelize(process.env.DB_TABLE, process.env.DB_USER, process.env.DB_PASS, {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
     //logging: logger,
     pool: {
         max: 9,
