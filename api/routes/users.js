@@ -36,7 +36,12 @@ router.route('/')
               attributes:['id','full_number', 'location'],
               through: {attributes: []}
             },
-              {model: db.computer}
+              {model: db.computer
+              },
+              {
+                model: db.serviceRequests,
+                through: {attributes: []}
+              }
           ]
         })
           .then((users) => {

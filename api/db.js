@@ -31,11 +31,14 @@ db.sequelize = sequelize;
 //Gets models
 
 db.users = require('./models/users.js')(sequelize,Sequelize);
-//db.onlineUsers = require('./models/onlineUsers.js')(sequelize,Sequelize);
+
+db.serviceRequests = require('./models/service_requests.js')(sequelize,Sequelize);
+db.openTickets = sequelize.define('open_tickets')
 
 db.phones = require('./models/phones.js')(sequelize,Sequelize);
 db.userPhones = sequelize.define('user_phones');
 db.onlineUsers = sequelize.define('online_users', {db_id: Sequelize.STRING, session_id: Sequelize.STRING, disconnected: Sequelize.BOOLEAN, last_update_date: Sequelize.DATE});
+
 
 db.computer = require('./models/computers.js')(sequelize,Sequelize);
 db.computerAttributes = require('./models/computer_attributes.js')(sequelize,Sequelize);
@@ -45,19 +48,16 @@ db.computerAttributes = require('./models/computer_attributes.js')(sequelize,Seq
 db.users.belongsToMany(db.phones, {through: db.userPhones, foreignKey:'user_name' });
 db.phones.belongsToMany(db.users, {as: 'owners', through: db.userPhones, foreignKey:'phone_id'});
 
+db.users.belongsToMany(db.serviceRequests, {through: db.openTickets, foreignKey:'request_user'});
+db.serviceRequests.belongsTo(db.users, {foreignKey: 'request_user'});
+
 db.users.belongsToMany(db.computer, { through: db.onlineUsers, foreignKey:'user_name'})
 db.computer.belongsToMany(db.users, { through: db.onlineUsers, foreignKey:'computer_id'});
-
-
-//db.onlineUsers.belongsToMany(db.users, {through: 'userOnlineComputer'});
 
 db.computerAttributes.belongsTo(db.computer, {foreignKey: 'computer_id', targetKey: 'computer_id'});
 db.computer.hasOne(db.computerAttributes, {foreignKey: 'computer_id'});
 
 // Sync SQL with Sequelize Models USE CAUTION
 //sequelize.sync({force:true});
-
-//db.onlineUsers.sync({force:true});
-//db.computer.sync({alter:true});
 
 module.exports = db;

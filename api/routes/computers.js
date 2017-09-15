@@ -56,4 +56,34 @@ router.route('/')
       });
   });
 
+//Single Computer GET route
+router.route('/:id')
+  .get((req, res) => {
+    let id = req.params.id;
+
+    Computer.findById(
+      id, {
+        include: [
+          { model: db.computerAttributes, 
+            attributes: {
+              exclude: ['computer_id']
+            }
+          },
+          { model: db.users,
+            through: {attributes: []} }]
+      }
+
+    )
+      .then(function (user) {
+        if (!user) {
+          res.status(404).json({ message: `Computer: ${id} not found!` })
+        }
+        res.status(200).json(user);
+      })
+      .catch(function (err) {
+        res.status(500).json(err);
+      })
+
+  });
+
 module.exports = router;
