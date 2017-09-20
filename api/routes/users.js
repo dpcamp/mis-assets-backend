@@ -10,7 +10,7 @@ const express = require('express'),
 
 router.route('/')
   .get((req, res) => {
-    let per_page = req.param('per_page');
+    let per_page = req.params.per_page;
 
     if (per_page == null) limit = null;
     else {
@@ -21,9 +21,9 @@ router.route('/')
     Users.findAndCountAll({ limit: limit, offset: offset })
       .then((data) => {
 
-        if (req.param('page') == null) page = 1;
+        if (req.params.page == null) page = 1;
         else {
-          page = req.param('page');
+          page = req.params.page;
         }
 
         let pages = Math.ceil(data.count / limit);
