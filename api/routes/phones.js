@@ -143,7 +143,7 @@ router.route('/:id/users')
         if (!phone) {
           res.status(404).json({ message: 'record not found!' })
         }
-        phone.getUsers()
+        phone.getOwners()
         .then(function (result) {
          res.status(200).json(result);
         })
