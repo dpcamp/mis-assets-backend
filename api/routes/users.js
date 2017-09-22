@@ -60,12 +60,26 @@ router.route('/')
         res.status(500).json(err);
       });
   });
-//Single User GET rout
+//Single User GET route
 router.route('/:id')
   .get((req, res) => {
-    let id = req.params.id;
 
-    Users.findById(id)
+    Users.find({ 
+      where: {
+      user_name: req.params.id
+    },
+    include: [
+            {model: db.phones,
+              attributes:['id','full_number', 'location'],
+              through: {attributes: []}
+            },
+              {model: db.computer
+              },
+              {
+                model: db.serviceRequests,
+                through: {attributes: []}
+              }
+          ] })
       .then(function (user) {
         if (!user) {
           res.status(404).json({ message: `User: ${id} not found!` })
