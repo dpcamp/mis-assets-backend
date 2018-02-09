@@ -25,6 +25,7 @@ const logger = new(winston.Logger)({
 
 const db = {};
 
+Op = Sequelize.Op;
 db.Sequelize = Sequelize; 
 db.sequelize = sequelize; 
 

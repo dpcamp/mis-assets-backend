@@ -23,6 +23,12 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.INTEGER
     },
+    insert_time: {
+      type: DataTypes.DATE
+    },
+    close_time: {
+      type: DataTypes.DATE
+    },
   }, {
       freezeTableName: true,
       timestamps: false,

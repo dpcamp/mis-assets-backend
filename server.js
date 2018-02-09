@@ -55,6 +55,8 @@ app.use(expressValidator());
 app.use('/api/users', require('./api/routes/users'));
 app.use('/api/phones', require('./api/routes/phones'));
 app.use('/api/computers', require('./api/routes/computers'));
+app.use('/api/service_requests', require('./api/routes/service-requests'));
+app.use('/api/reports', require('./api/routes/reports'));
 
 //Client Routes
 //app.use('/', require('./app/routes'));

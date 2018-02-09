@@ -28,11 +28,11 @@ router.route('/')
 
 router.route('/')
   .get((req, res) => {
-    let per_page = req.params.per_page;
+    let perPage = req.query.per_page;
 
-    if (per_page == null) limit = null;
+    if (perPage == null) limit = null;
     else {
-      limit = per_page;
+      limit = parseInt(perPage);
     }
     let offset = 0;
 

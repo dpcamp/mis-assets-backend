@@ -16,6 +16,12 @@
     mac_address: {
       type: DataTypes.STRING
     },
+    mac_address: {
+      type: DataTypes.STRING
+    },
+    installed_on: {
+      type: DataTypes.DATE
+    },
   }, {
     freezeTableName: true,
     timestamps: false,
