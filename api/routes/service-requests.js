@@ -49,7 +49,7 @@ router.route('/')
     });
 });
 
-// Single Phone GET route
+// Single SR GET route
 
 router.route('/:id')
 .get((req, res) => {

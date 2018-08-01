@@ -33,7 +33,7 @@ router.route('/')
           offset: offset,
           include: [
             {model: db.phones,
-              attributes:['id','full_number', 'location'],
+              attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
               {model: db.computer
@@ -70,7 +70,37 @@ router.route('/:id')
     },
     include: [
             {model: db.phones,
-              attributes:['id','full_number', 'location'],
+              attributes:['id','full_number', 'extension', 'location'],
+              through: {attributes: []}
+            },
+              {model: db.computer
+              },
+              {
+                model: db.serviceRequests,
+                through: {attributes: []}
+              }
+          ] })
+      .then(function (user) {
+        if (!user) {
+          res.status(404).json({ message: `User: ${id} not found!` })
+        }
+        res.status(200).json(user);
+      })
+      .catch(function (err) {
+        res.status(500).json(err);
+      })
+
+  });
+
+//Users By Extension GET route
+router.route('/ext/:id')
+  .get((req, res) => {
+
+    Users.findAll({ 
+    include: [
+            {model: db.phones,
+              where: {extension: req.params.id},
+              attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
               {model: db.computer
