@@ -93,6 +93,28 @@ router.route('/:id')
 
   });
 
+  // Single Phone GET route
+
+router.route('/getEXT/:ext')
+.get((req, res) => {
+
+  Phones.findAll({
+    where:{
+      extension: req.params.ext
+    }
+  })
+    .then(function (phone) {
+      if (!phone) {
+        res.status(404).json({ message: 'record not found!' })
+      }
+      res.status(200).json(phone);
+    })
+    .catch(function (err) {
+      res.status(500).json(err);
+    })
+
+});
+
 
 
 //phone PUT route
