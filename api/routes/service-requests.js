@@ -54,7 +54,7 @@ router.route('/')
 router.route('/:id')
 .get((req, res) => {
 
-  ServiceRequests.findById(req.params.id)
+  ServiceRequests.findByPk(req.params.id)
     .then(function (sr) {
       if (!sr) {
         res.status(404).json({ message: 'record not found!' })

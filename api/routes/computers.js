@@ -61,7 +61,7 @@ router.route('/:id')
   .get((req, res) => {
     let id = req.params.id;
 
-    Computer.findById(
+    Computer.findByPk(
       id, {
         include: [
           { model: db.computerAttributes, 

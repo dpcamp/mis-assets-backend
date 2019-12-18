@@ -1,10 +1,10 @@
 const express = require('express'),
   router = express.Router(),
-  db = require('../db'),
-  winston = require('winston')
+  db = require('../db')
+//  winston = require('winston')
   ;
-winston.add(winston.transports.File, { filename: 'logfile.log' });
-winston.level = 'debug';
+//winston.add(winston.transports.File, { filename: 'logfile.log' });
+//winston.level = 'debug';
 //phone POST route
 
 Phones = db.phones;
@@ -80,7 +80,7 @@ router.route('/')
 router.route('/:id')
   .get((req, res) => {
 
-    Phones.findById(req.params.id)
+    Phones.findByPk(req.params.id)
       .then(function (phone) {
         if (!phone) {
           res.status(404).json({ message: 'record not found!' })
@@ -162,7 +162,7 @@ router.route('/:id')
 router.route('/:id/users')
   .get((req, res) => {
     
-    Phones.findById(req.params.id)
+    Phones.findByPk(req.params.id)
       .then(function (phone) {
         if (!phone) {
           res.status(404).json({ message: 'record not found!' })
@@ -185,7 +185,7 @@ router.route('/:id/users')
   .post((req, res) => {
     let users = req.body.UserSAMAccountName;
 
-    Phones.findById(req.params.id)
+    Phones.findByPk(req.params.id)
       .then(function (phone) {
         if (!phone) {
           res.status(404).json({ message: 'record not found!' })

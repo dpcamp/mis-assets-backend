@@ -64,7 +64,7 @@ router.route('/')
 router.route('/:id')
   .get((req, res) => {
 
-    Users.find({ 
+    Users.findOne({ 
       where: {
       user_name: req.params.id
     },
@@ -150,7 +150,7 @@ router.route('/:id/phones')
   .post((req, res) => {
     let phones = req.body.phoneID;
     
-    Users.findById(req.params.id)
+    Users.findByPk(req.params.id)
       .then(function (user) {
         if (!user) {
           res.status(404).json({ message: 'record not found!' })

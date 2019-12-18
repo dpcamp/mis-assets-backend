@@ -10,8 +10,8 @@ require('dotenv').config();
     expressValidator    = require('express-validator'),
     session             = require('express-session'),
     cookieParser        = require('cookie-parser'),
-    flash               = require('connect-flash'),
-    winston             = require('winston')
+    flash               = require('connect-flash')
+    //winston             = require('winston')
     //sql                 = require('mssql')
 
     //Sequelize           = require('sequelize')

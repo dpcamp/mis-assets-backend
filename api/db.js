@@ -1,5 +1,5 @@
-const Sequelize = require ('sequelize'),
-    winston = require('winston')
+const Sequelize = require ('sequelize')
+    //winston = require('winston')
 ;
 
 
@@ -13,7 +13,7 @@ const sequelize = new Sequelize(process.env.DB_TABLE, process.env.DB_USER, proce
         idle: 10000
     }
 });
-
+/*
 const logger = new(winston.Logger)({
     level: 'debug',
     transports: [
@@ -21,7 +21,7 @@ const logger = new(winston.Logger)({
         new(winston.transports.File)({filename: './logfile.log'})
     ]
 });
-
+*/
 
 const db = {};
 
@@ -49,7 +49,7 @@ db.computerAttributes = require('./models/computer_attributes.js')(sequelize,Seq
 db.users.belongsToMany(db.phones, {through: db.userPhones, foreignKey:'user_name' });
 db.phones.belongsToMany(db.users, {as: 'owners', through: db.userPhones, foreignKey:'phone_id'});
 
-db.users.belongsToMany(db.serviceRequests, {through: db.openTickets, foreignKey:'request_user'});
+db.users.belongsToMany(db.serviceRequests, {through: db.openTickets, foreignKey:'request_user', otherKey:'service_request_id'});
 db.serviceRequests.belongsTo(db.users, {foreignKey: 'request_user'});
 
 db.users.belongsToMany(db.computer, { through: db.onlineUsers, foreignKey:'user_name'})
