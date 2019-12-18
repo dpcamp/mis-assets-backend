@@ -2,10 +2,10 @@
   "name": "mis-assets",
   "version": "1.0.0",
   "description": "MIS assets server backend",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
+    "dev": "nodemon ./bin.www",
+    "start": "node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -25,6 +25,7 @@
     "moment": "^2.20.1",
     "mongodb-uri": "^0.9.7",
     "mongoose": "^4.11.1",
+    "morgan": "^1.9.1",
     "mssql": "^4.0.4",
     "sequelize": "^5.21.3",
     "tedious": "^6.6.2"
