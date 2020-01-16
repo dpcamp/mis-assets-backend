@@ -3,12 +3,12 @@ const express = require('express'),
   models = require('../models')
   ;
 
-  UserForm =models.user_forms
+  UserForm = models.user_form
 
   router.route('/')
   .post((req, res) => {
-
-    Phones.create(req.body)
+    console.log(JSON.stringify(req.body))
+    UserForm.create(req.body)
       .then(function (form) {
         res.status(200).json(form)
       })
@@ -55,3 +55,4 @@ router.route('/:id')
       res.status(500).json(err);
     });
 });
+module.exports = router;

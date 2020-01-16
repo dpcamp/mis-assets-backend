@@ -10,6 +10,7 @@ var phonesRouter = require('./routes/phones');
 var computersRouter = require('./routes/computers');
 var srRouter = require('./routes/service-requests');
 var reportsRouter = require('./routes/reports');
+var formsRouter = require('./routes/user_forms');
 
 var corsOptions = {
   origin: ['http://192.168.235.97:4200','http://pebud.vmsinc.org'],
@@ -37,6 +38,7 @@ app.use('/api/phones', phonesRouter);
 app.use('/api/computers', computersRouter);
 app.use('/api/service_requests', srRouter);
 app.use('/api/reports', reportsRouter);
+app.use('/api/form', formsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
