@@ -33,6 +33,9 @@
     timestamps: false,
     underscored: true
   });
-  ComputerAttributes.associate = function(models) {}
+  ComputerAttributes.associate = function(models) {
+  ComputerAttributes.belongsTo(models.computers, {foreignKey: 'computer_id', targetKey: 'computer_id'});
+
+  }
   return ComputerAttributes; 
   };

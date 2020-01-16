@@ -35,6 +35,8 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
       underscored: true
     });
-    ServiceRequests.associate = function(models) {}
+    ServiceRequests.associate = function(models) {
+      ServiceRequests.belongsTo(models.users, {foreignKey: 'request_user'});
+    }
   return ServiceRequests;
 };

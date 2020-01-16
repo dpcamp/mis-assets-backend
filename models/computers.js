@@ -28,6 +28,9 @@
     timestamps: false,
     underscored: true
   });
-  Computers.associate = function(models) {}
+  Computers.associate = function(models) {
+    Computers.belongsToMany(models.users, { through: models.online_users, foreignKey:'computer_id'});
+    Computers.hasOne(models.computer_attributes, {foreignKey: 'computer_id'});
+  }
   return Computers; 
   };

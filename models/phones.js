@@ -99,6 +99,9 @@
     timestamps: false,
     underscored: true
   });
-  Phones.associate = function(models) {}
+  Phones.associate = function(models) {
+    Phones.belongsToMany(models.users, {as: 'owners', through: 'user_phones', foreignKey:'phone_id'});
+
+  }
   return Phones; 
   };

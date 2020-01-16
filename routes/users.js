@@ -36,10 +36,10 @@ router.route('/')
               attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
-              {model: models.computer
+              {model: models.computers
               },
               {
-                model: models.serviceRequests,
+                model: models.service_requests,
                 through: {attributes: []}
               }
           ]
@@ -73,10 +73,10 @@ router.route('/:id')
               attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
-              {model: models.computer
+              {model: models.computers
               },
               {
-                model: models.serviceRequests,
+                model: models.service_requests,
                 through: {attributes: []}
               }
           ] })
@@ -103,10 +103,10 @@ router.route('/ext/:id')
               attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
-              {model: models.computer
+              {model: models.computers
               },
               {
-                model: models.serviceRequests,
+                model: models.service_requests,
                 through: {attributes: []}
               }
           ] })

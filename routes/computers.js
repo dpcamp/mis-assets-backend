@@ -3,7 +3,7 @@ const express = require('express'),
   models = require('../models')
  ;
 
- let Computer = models.computer
+ let Computer = models.computers
 
   //All computers GET route
 
@@ -34,7 +34,7 @@ router.route('/')
           limit: limit,
           offset: offset,
           include: [
-              {model: models.computerAttributes},
+              {model: models.computer_attributes},
               {model: models.users} 
         ]
         })
@@ -64,7 +64,7 @@ router.route('/:id')
     Computer.findByPk(
       id, {
         include: [
-          { model: models.computerAttributes, 
+          { model: models.computer_attributes, 
             attributes: {
               exclude: ['computer_id']
             }

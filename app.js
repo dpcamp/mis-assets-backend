@@ -11,6 +11,13 @@ var computersRouter = require('./routes/computers');
 var srRouter = require('./routes/service-requests');
 var reportsRouter = require('./routes/reports');
 
+var corsOptions = {
+  origin: ['http://192.168.235.97:4200','http://pebud.vmsinc.org'],
+  credentials: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+var cors = require('cors');
 
 var app = express();
 
@@ -23,7 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cors(corsOptions))
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/phones', phonesRouter);
