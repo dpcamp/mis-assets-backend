@@ -5,6 +5,7 @@ const express = require('express'),
 
   Users = models.users;
   UserPhones = models.UserPhones;
+  dfUsers = models.dfUsers;
 
   //All phones GET route
 
@@ -92,6 +93,22 @@ router.route('/:id')
 
   });
 
+  //Dayforce User get route
+  router.route('/emp_id/:id')
+  .get((req, res) => {
+    let empID = req.params.id
+
+      sequelize.query(`DayForceEmployees @EmpID=${empID}`, { type: sequelize.QueryTypes.SELECT})
+          .then((data) => {
+              res.status(200).json({
+                  data: data
+
+              });
+          })
+          .catch((err) => {
+              res.status(500).json(err);
+          });
+  });
 //Users By Extension GET route
 router.route('/ext/:id')
   .get((req, res) => {

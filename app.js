@@ -12,6 +12,8 @@ var srRouter = require('./routes/service-requests');
 var reportsRouter = require('./routes/reports');
 var formsRouter = require('./routes/user_forms');
 
+var nodemailer = require('nodemailer');
+
 var corsOptions = {
   origin: ['http://192.168.235.97:4200','http://pebud.vmsinc.org'],
   credentials: true,
