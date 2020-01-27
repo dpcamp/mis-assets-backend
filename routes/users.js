@@ -61,6 +61,28 @@ router.route('/')
         res.status(500).json(err);
       });
   });
+  //Single User GET route
+router.route('/validate')
+.get((req, res) => {
+
+  Users.findOne({ 
+    where: {
+    user_name: req.query.user_name
+    }
+  })
+    .then(function (user) {
+      if (!user) {
+        res.status(200).json({ user_exists: false })
+      }
+      else {
+      res.status(200).json({ user_exists: true });
+      }
+    })
+    .catch(function (err) {
+      res.status(500).json({ message: err });
+    })
+
+});
 //Single User GET route
 router.route('/:id')
   .get((req, res) => {
@@ -83,12 +105,14 @@ router.route('/:id')
           ] })
       .then(function (user) {
         if (!user) {
-          res.status(404).json({ message: `User: ${id} not found!` })
+          res.status(200).json({ message: `User: ${req.params.id} not found!` })
         }
+        else {
         res.status(200).json(user);
+        }
       })
       .catch(function (err) {
-        res.status(500).json(err);
+        res.status(500).json({ message: err });
       })
 
   });
@@ -131,7 +155,9 @@ router.route('/ext/:id')
         if (!user) {
           res.status(404).json({ message: `User: ${id} not found!` })
         }
+        else {
         res.status(200).json(user);
+        }
       })
       .catch(function (err) {
         res.status(500).json(err);

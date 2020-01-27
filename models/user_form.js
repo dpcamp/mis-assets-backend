@@ -45,7 +45,8 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
   user_form.associate = function(models) {
-    // associations can be defined here
+    user_form.belongsTo(models.users, {as: 'submit_user', foreignKey: 'submitted_by'})
+    user_form.belongsTo(models.users, {as: 'create_user', foreignKey: 'created_by'})
   };
   return user_form;
 };
