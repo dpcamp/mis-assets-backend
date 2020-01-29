@@ -10,8 +10,8 @@ const sendMail = (user, callback) => {
     port: 25,
     secure: false,
     auth: {
-      user: "derek.campanile@vmsinc.org",
-      pass: "QAZwsx123"
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PW
     },
     tls: {
       rejectUnauthorized: false
