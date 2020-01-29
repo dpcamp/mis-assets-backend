@@ -5,6 +5,7 @@ const express = require('express'),
 
   UserForm = models.user_form
   Op = models.Sequelize.Op
+  pCount = ''
   const operatorsAliases = {
     $like: Op.like,
     $not: Op.not
@@ -17,6 +18,12 @@ const express = require('express'),
     UserForm.create(req.body)
     .then (function (form){
     console.log(`user data: ${JSON.stringify(form)}`)
+    UserForm.findAll({
+      where: {status: 'pending'}
+    })
+    .then(function(res) {
+      this.pCount = res.length
+    })
     UserForm.findByPk(form.id, {      
       include: 
       {model: models.users,
@@ -24,7 +31,9 @@ const express = require('express'),
       }
       })
         .then (function (user){
-        res.status(200).json({data: user})
+        
+          console.log(this.pCount)
+        res.status(200).json({pending_count: this.pCount, data: user})
       })
     })
       .catch(function (err) {
@@ -59,8 +68,14 @@ const express = require('express'),
       ]
     })
       .then(function (form) {
-        let count = form.length
-        res.status(200).json({count: count, data: form })
+        
+        if(req.query.get_status){
+          let pCount = form.length
+          res.status(200).json({pending_count: pCount, data: form })
+        } else {
+          res.status(200).json({data: form })
+        }
+        
       })
       .catch(function (err) {
         res.status(500).json(err)
@@ -90,19 +105,37 @@ router.route('/:id')
 .put((req, res) => {
   let id = req.params.id;
 
-
   UserForm.update(req.body, {
     where: {
       id: id
     }
   })
-
     .then(function (form) {
 
-      res.status(200).json({ message: `form: ${form.id} updated!` });
-    })
-    .catch(function (err) {
-      res.status(500).json(err);
-    });
-});
+      console.log(JSON.stringify(form))
+        UserForm.findAll({
+          where: {status: 'pending'}
+        })
+        .then(function(res) {
+          this.pCount = res.length
+        })
+      UserForm.findByPk(id, {      
+        include: 
+        {model: models.users,
+          as: 'submit_user'
+        }
+        })
+          .then (function (user){
+          res.status(200).json({message: `user id: ${user.id} updated!`, pending_count: this.pCount, data: user})
+        })
+      })
+        .catch(function (err) {
+          res.status(500).json(err)
+        })
+  
+
+
+    
+    
+      });
 module.exports = router;
