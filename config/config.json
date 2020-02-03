@@ -2,7 +2,7 @@
   "development": {
     "username": "mis",
     "password": "m!s@cc3ss",
-    "database": "mis-assets",
+    "database": "mis-assetsDEV",
     "host": "GRF-MISDEV",
     "dialect": "mssql",
     "operatorsAliases": false,

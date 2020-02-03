@@ -7,7 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var phonesRouter = require('./routes/phones');
-var computersRouter = require('./routes/computers');
+var computersRouter = require('./routes/pdq_computers');
 var srRouter = require('./routes/service-requests');
 var reportsRouter = require('./routes/reports');
 var formsRouter = require('./routes/user_forms');
@@ -15,7 +15,7 @@ var formsRouter = require('./routes/user_forms');
 var nodemailer = require('nodemailer');
 
 var corsOptions = {
-  origin: ['http://itdash.vmsinc.org','http://pebud.vmsinc.org'],
+  origin: [process.env.URL,'http://pebud.vmsinc.org'],
   credentials: true,
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
