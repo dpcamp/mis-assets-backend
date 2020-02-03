@@ -15,7 +15,7 @@ var formsRouter = require('./routes/user_forms');
 var nodemailer = require('nodemailer');
 
 var corsOptions = {
-  origin: ['http://192.168.235.97:4200','http://pebud.vmsinc.org'],
+  origin: ['http://itdash.vmsinc.org','http://pebud.vmsinc.org'],
   credentials: true,
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }

@@ -4,9 +4,9 @@ module.exports = {
     return queryInterface.createTable('user_forms', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        autoIncrement: false,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       first_name: {
         type: Sequelize.STRING
