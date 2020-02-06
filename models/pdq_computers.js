@@ -3,12 +3,15 @@ module.exports = (sequelize, DataTypes) => {
   const PDQComputers = sequelize.define('pdq_computers', {
     computer_id: DataTypes.INTEGER,
     host_name: DataTypes.STRING,
-    ad_last_logon: DataTypes.STRING,
+    ad_last_logon: DataTypes.DATE,
     current_user: DataTypes.STRING,
-    memory: DataTypes.STRING,
+    memory: DataTypes.INTEGER,
     os_name: DataTypes.STRING,
+    chassis: DataTypes.STRING,
     os_service_pack: DataTypes.STRING,
-    ad_when_created: DataTypes.STRING,
+    os_install_date: DataTypes.DATE,
+    ip_address: DataTypes.STRING,
+    ad_when_created: DataTypes.DATE,
     status: DataTypes.STRING,
     online_user: DataTypes.STRING
   }, {

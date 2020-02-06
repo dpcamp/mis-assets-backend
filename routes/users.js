@@ -37,7 +37,7 @@ router.route('/')
               attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
-              {model: models.computers
+              {model: models.pdq_computers
               },
               {
                 model: models.service_requests,
@@ -96,7 +96,7 @@ router.route('/:id')
               attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
-              {model: models.computers
+              {model: models.pdq_computers
               },
               {
                 model: models.service_requests,
@@ -137,14 +137,14 @@ router.route('/:id')
 router.route('/ext/:id')
   .get((req, res) => {
 
-    Users.findAll({ 
+    Users.findOne({ 
     include: [
             {model: models.phones,
               where: {extension: req.params.id},
               attributes:['id','full_number', 'extension', 'location'],
               through: {attributes: []}
             },
-              {model: models.computers
+              {model: models.pdq_computers
               },
               {
                 model: models.service_requests,

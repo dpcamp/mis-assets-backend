@@ -35,10 +35,10 @@ const express = require('express'),
           offset: offset
           ,
           include: [
-              {model: models.pdq_nic_ip},
-              {model: models.pdq_displays},
-              {model: models.pdq_applications},
-              {model: models.users} 
+              //{model: models.pdq_nic_ip, attributes:  ['address']},
+              {model: models.pdq_displays, attributes: ['manufacturer', 'model']},
+              //{model: models.pdq_applications, attributes: ['name']},
+              {model: models.users, attributes:  ['display_name']} 
         ]
         })
           .then((computers) => {
@@ -64,17 +64,16 @@ router.route('/:id')
   .get((req, res) => {
     let id = req.params.id;
 
-    Computer.findByPk(
-      id, {
-        include: [
-          { model: models.computer_attributes, 
-            attributes: {
-              exclude: ['computer_id']
-            }
-          },
-          { model: models.users,
-            through: {attributes: []} }]
+    Computer.findOne({
+      where: {computer_id: id},
+      include: [
+        {model: models.pdq_nic_ip},
+        {model: models.pdq_displays},
+        {model: models.pdq_applications},
+        {model: models.users} 
+  ]
       }
+    
 
     )
       .then(function (user) {

@@ -15,13 +15,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       ad_last_logon: {
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       },
       current_user: {
         type: Sequelize.STRING
       },
       memory: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       os_name: {
         type: Sequelize.STRING
@@ -29,7 +29,16 @@ module.exports = {
       os_service_pack: {
         type: Sequelize.STRING
       },
+      os_install_date: {
+        type: Sequelize.DATE
+      },
       ad_when_created: {
+        type: Sequelize.DATE
+      },
+      ip_address: {
+        type: Sequelize.STRING
+      },
+      chassis: {
         type: Sequelize.STRING
       },
       status: {

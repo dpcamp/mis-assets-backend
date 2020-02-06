@@ -37,7 +37,7 @@
         foreignKey:'service_request_id'
       } 
     });
-    Users.belongsToMany(models.computers, { through: models.online_users, foreignKey:'user_name'})
+    Users.hasMany(models.pdq_computers, { foreignKey:'online_user'})
 
   }
   return Users; 

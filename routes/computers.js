@@ -3,7 +3,7 @@ const express = require('express'),
   models = require('../models')
  ;
 
- let Computer = models.computers
+ let Computer = models.pdq_computers
 
   //All computers GET route
 
@@ -34,7 +34,6 @@ router.route('/')
           limit: limit,
           offset: offset,
           include: [
-              {model: models.computer_attributes},
               {model: models.users} 
         ]
         })
@@ -61,24 +60,19 @@ router.route('/:id')
   .get((req, res) => {
     let id = req.params.id;
 
-    Computer.findByPk(
-      id, {
-        include: [
-          { model: models.computer_attributes, 
-            attributes: {
-              exclude: ['computer_id']
-            }
-          },
-          { model: models.users,
-            through: {attributes: []} }]
-      }
+    Computer.findOne(
+      {where: computer_id = id}
+      // , {
+      //   include: [
+      //     { model: models.users}]
+      // }
 
     )
-      .then(function (user) {
-        if (!user) {
+      .then(function (computer) {
+        if (!computer) {
           res.status(404).json({ message: `Computer: ${id} not found!` })
         }
-        res.status(200).json(user);
+        res.status(200).json(computer);
       })
       .catch(function (err) {
         res.status(500).json(err);
